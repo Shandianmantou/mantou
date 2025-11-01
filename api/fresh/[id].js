@@ -1,33 +1,24 @@
 // Vercel动态路由 - 处理带ID的请求
-const fs = require('fs');
-const path = require('path');
+// 注意：需要使用共享存储，这里简化处理
+// 实际应该使用外部数据库或KV存储
 
-const DATA_DIR = '/tmp/data';
-const FRESH_FILE = path.join(DATA_DIR, 'fresh.json');
-
-function ensureDataDir() {
-    if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-}
+let memoryStore = null;
 
 function readData() {
-    ensureDataDir();
     try {
-        if (fs.existsSync(FRESH_FILE)) {
-            const data = fs.readFileSync(FRESH_FILE, 'utf8');
-            return JSON.parse(data);
+        if (memoryStore === null) {
+            memoryStore = [];
         }
+        return memoryStore;
     } catch (error) {
         console.error('读取失败:', error);
+        return [];
     }
-    return [];
 }
 
 function writeData(data) {
-    ensureDataDir();
     try {
-        fs.writeFileSync(FRESH_FILE, JSON.stringify(data, null, 2), 'utf8');
+        memoryStore = data;
         return true;
     } catch (error) {
         console.error('写入失败:', error);
@@ -35,7 +26,7 @@ function writeData(data) {
     }
 }
 
-module.exports = async function handler(req, res) {
+module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -45,9 +36,9 @@ module.exports = async function handler(req, res) {
     }
 
     const method = req.method;
-    // Vercel动态路由，从URL中提取id
-    const pathParts = req.url.split('/');
-    const id = parseInt(pathParts[pathParts.length - 1]) || parseInt(req.query.id);
+    
+    // Vercel动态路由，从URL或query中提取id
+    const id = parseInt(req.query.id) || (req.url ? parseInt(req.url.split('/').pop()) : null);
 
     if (!id || isNaN(id)) {
         return res.status(400).json({ success: false, error: '需要有效的ID' });
@@ -55,12 +46,12 @@ module.exports = async function handler(req, res) {
 
     // 解析请求体（如果是PUT）
     let body = {};
-    if (method === 'PUT') {
+    if (method === 'PUT' && req.body) {
         try {
             if (typeof req.body === 'string') {
                 body = JSON.parse(req.body);
             } else {
-                body = req.body || {};
+                body = req.body;
             }
         } catch (e) {
             return res.status(400).json({ success: false, error: '无效的JSON数据' });
@@ -74,7 +65,7 @@ module.exports = async function handler(req, res) {
             if (!item) {
                 return res.status(404).json({ success: false, error: '未找到' });
             }
-            return res.json(item);
+            return res.status(200).json(item);
         }
 
         if (method === 'PUT') {
@@ -85,7 +76,7 @@ module.exports = async function handler(req, res) {
             }
             data[index] = { ...data[index], ...body };
             if (writeData(data)) {
-                return res.json({ success: true, data: data[index] });
+                return res.status(200).json({ success: true, data: data[index] });
             }
             return res.status(500).json({ success: false, error: '更新失败' });
         }
@@ -97,7 +88,7 @@ module.exports = async function handler(req, res) {
                 return res.status(404).json({ success: false, error: '未找到' });
             }
             if (writeData(filteredData)) {
-                return res.json({ success: true });
+                return res.status(200).json({ success: true });
             }
             return res.status(500).json({ success: false, error: '删除失败' });
         }
@@ -105,7 +96,10 @@ module.exports = async function handler(req, res) {
         return res.status(405).json({ success: false, error: '不支持的方法' });
     } catch (error) {
         console.error('API错误:', error);
-        return res.status(500).json({ success: false, error: error.message });
+        return res.status(500).json({ 
+            success: false, 
+            error: error.message || '服务器错误'
+        });
     }
 }
 
