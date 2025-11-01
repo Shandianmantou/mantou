@@ -30,35 +30,34 @@ function writeData(data) {
 }
 
 module.exports = async (req, res) => {
-    // 设置CORS头
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-
-    const method = req.method;
-    
-    // 解析请求体
-    let body = {};
-    if ((method === 'POST' || method === 'PUT') && req.body) {
-        try {
-            if (typeof req.body === 'string') {
-                body = JSON.parse(req.body);
-            } else {
-                body = req.body;
-            }
-        } catch (e) {
-            return res.status(400).json({ success: false, error: '无效的JSON数据' });
-        }
-    }
-
     try {
+        // 设置CORS头
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+        if (req.method === 'OPTIONS') {
+            res.status(200).end();
+            return;
+        }
+
+        const method = req.method;
+        
+        // 解析请求体 - Vercel会自动解析JSON
+        let body = {};
+        if ((method === 'POST' || method === 'PUT') && req.body) {
+            try {
+                body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+            } catch (e) {
+                res.status(400).json({ success: false, error: '无效的JSON数据' });
+                return;
+            }
+        }
+
         if (method === 'GET') {
             const data = readData();
-            return res.status(200).json(data);
+            res.status(200).json(data);
+            return;
         }
 
         if (method === 'POST') {
@@ -69,18 +68,19 @@ module.exports = async (req, res) => {
             };
             data.push(newItem);
             if (writeData(data)) {
-                return res.status(200).json({ success: true, data: newItem });
+                res.status(200).json({ success: true, data: newItem });
+                return;
             }
-            return res.status(500).json({ success: false, error: '保存失败' });
+            res.status(500).json({ success: false, error: '保存失败' });
+            return;
         }
 
-        return res.status(405).json({ success: false, error: '不支持的方法' });
+        res.status(405).json({ success: false, error: '不支持的方法' });
     } catch (error) {
         console.error('API错误:', error);
-        return res.status(500).json({ 
+        res.status(500).json({ 
             success: false, 
-            error: error.message || '服务器错误',
-            details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            error: error.message || '服务器错误'
         });
     }
 }
