@@ -2,10 +2,10 @@
   "name": "mantou-music",
   "version": "1.0.0",
   "description": "馒头音乐小站 - 后端服务器",
-  "main": "server.js",
+  "main": "server.local.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server.local.js",
+    "dev": "node server.local.js"
   },
   "keywords": ["music", "blog"],
   "author": "",
