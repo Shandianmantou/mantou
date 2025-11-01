@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内容管理 - 馒头音乐小站</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: calc(70px + var(--spacing-xl)) var(--spacing-md) var(--spacing-2xl);
+        }
+        
+        .admin-header {
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .admin-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: var(--spacing-md);
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .admin-tab {
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+        
+        .admin-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .admin-tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .admin-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+        
+        .admin-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .admin-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .admin-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .admin-card-meta {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .admin-card-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        .btn-edit {
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-edit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .btn-delete {
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-delete:hover {
+            background: #fee;
+            color: #c33;
+            border-color: #c33;
+        }
+        
+        .btn-add {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* 编辑表单模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-xl);
+        }
+        
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--border-light);
+        }
+        
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.9375rem;
+        }
+        
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            transition: var(--transition);
+            background: var(--surface);
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(201, 115, 79, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+        
+        .rating-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+        }
+        
+        .rating-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: flex-end;
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 2px solid var(--border-light);
+        }
+        
+        .btn-cancel {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-cancel:hover {
+            background: var(--background);
+        }
+        
+        .btn-save {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-save:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🎵</span>
+                <a href="index.html" class="logo-text" style="text-decoration: none; color: inherit;">馒头音乐小站</a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">返回主页</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">内容管理</h1>
+            <p style="color: var(--text-secondary);">编辑新鲜速递、经典重温、榜上有名等内容</p>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="fresh">新鲜速递</button>
+            <button class="admin-tab" data-tab="classic">经典重温</button>
+            <button class="admin-tab" data-tab="topics">榜上有名</button>
+        </div>
+
+        <!-- 新鲜速递 -->
+        <div class="tab-content active" id="tab-fresh">
+            <button class="btn-add" onclick="openAddModal('fresh')">+ 添加新文章</button>
+            <div class="admin-grid" id="fresh-list">
+                <!-- 动态加载 -->
+            </div>
+        </div>
+
+        <!-- 经典重温 -->
+        <div class="tab-content" id="tab-classic">
+            <button class="btn-add" onclick="openAddModal('classic')">+ 添加新文章</button>
+            <div class="admin-grid" id="classic-list">
+                <!-- 动态加载 -->
+            </div>
+        </div>
+
+        <!-- 榜上有名 -->
+        <div class="tab-content" id="tab-topics">
+            <button class="btn-add" onclick="openAddModal('topics')">+ 添加新专题</button>
+            <div class="admin-grid" id="topics-list">
+                <!-- 动态加载 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑模态框 -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">编辑内容</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="editForm">
+                <input type="hidden" id="editId" name="id">
+                <input type="hidden" id="editType" name="type">
+
+                <div class="form-group">
+                    <label class="form-label">标题</label>
+                    <input type="text" class="form-input" id="editTitle" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">艺术家/作者</label>
+                    <input type="text" class="form-input" id="editArtist" name="artist" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">发行日期/年份</label>
+                        <input type="text" class="form-input" id="editDate" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">类型</label>
+                        <input type="text" class="form-input" id="editGenre" name="genre" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">标签</label>
+                    <input type="text" class="form-input" id="editTag" name="tag" placeholder="如：新专辑、单曲、EP">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">开篇综述（红色块）</label>
+                    <textarea class="form-textarea" id="editIntro" name="intro" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">乐评正文</label>
+                    <textarea class="form-textarea" id="editContent" name="content" style="min-height: 200px;" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">评分</label>
+                    <div class="rating-inputs">
+                        <div class="rating-input-group">
+                            <label class="form-label" style="font-size: 0.875rem;">总分</label>
+                            <input type="number" class="form-input" id="editTotalScore" name="totalScore" step="0.1" min="0" max="10" required>
+                        </div>
+                        <div class="rating-input-group">
+                            <label class="form-label" style="font-size: 0.875rem;">馒头评分</label>
+                            <input type="number" class="form-input" id="editScore1" name="score1" step="0.1" min="0" max="10" required>
+                        </div>
+                        <div class="rating-input-group">
+                            <label class="form-label" style="font-size: 0.875rem;">马马评分</label>
+                            <input type="number" class="form-input" id="editScore2" name="score2" step="0.1" min="0" max="10" required>
+                        </div>
+                        <div class="rating-input-group">
+                            <label class="form-label" style="font-size: 0.875rem;">小馒头评分</label>
+                            <input type="number" class="form-input" id="editScore3" name="score3" step="0.1" min="0" max="10" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="topicFields" style="display: none;">
+                    <label class="form-label">专辑数量</label>
+                    <input type="number" class="form-input" id="editAlbumCount" name="albumCount" min="1">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">取消</button>
+                    <button type="submit" class="btn-save">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // API基础地址
+        // 本地开发: http://localhost:3000/api
+        // 部署后: 自动使用当前域名
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000/api' 
+            : '/api';
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData('fresh');
+            loadData('classic');
+            loadData('topics');
+
+            // Tab切换
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                });
+            });
+
+            // 表单提交
+            document.getElementById('editForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                saveData();
+            });
+        });
+
+        // 从后端加载数据
+        async function loadData(type) {
+            const container = document.getElementById(`${type}-list`);
+            container.innerHTML = '<p style="text-align: center; color: var(--text-muted);">加载中...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/${type}`);
+                if (!response.ok) throw new Error('加载失败');
+                
+                const data = await response.json();
+                
+                if (data.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--text-muted);">暂无数据，点击"添加"按钮创建第一条</p>';
+                    return;
+                }
+                
+                container.innerHTML = data.map(item => `
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <div>
+                                <h3 class="admin-card-title">${item.title || '未命名'}</h3>
+                                <p class="admin-card-meta">${item.artist || item.category || ''} · ${item.date || ''}</p>
+                            </div>
+                        </div>
+                        <div class="admin-card-actions">
+                            <button class="btn-edit" onclick="openEditModal('${type}', ${item.id})">编辑</button>
+                            <button class="btn-delete" onclick="deleteItem('${type}', ${item.id})">删除</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                container.innerHTML = `<p style="text-align: center; color: #c33;">加载失败！请确保后端服务器已启动（运行 node server.js）</p>`;
+            }
+        }
+
+        function openAddModal(type) {
+            document.getElementById('editForm').reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('editType').value = type;
+            document.getElementById('modalTitle').textContent = `添加${getTypeName(type)}`;
+            document.getElementById('topicFields').style.display = type === 'topics' ? 'block' : 'none';
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        async function openEditModal(type, id) {
+            try {
+                const response = await fetch(`${API_BASE}/${type}`);
+                if (!response.ok) throw new Error('加载失败');
+                
+                const data = await response.json();
+                const item = data.find(i => i.id === id);
+                
+                if (!item) {
+                    alert('未找到数据');
+                    return;
+                }
+
+                document.getElementById('editId').value = item.id;
+                document.getElementById('editType').value = type;
+                document.getElementById('editTitle').value = item.title || '';
+                document.getElementById('editArtist').value = item.artist || item.category || '';
+                document.getElementById('editDate').value = item.date || '';
+                document.getElementById('editGenre').value = item.genre || '';
+                document.getElementById('editTag').value = item.tag || '';
+                document.getElementById('editIntro').value = item.intro || '';
+                document.getElementById('editContent').value = item.content || '';
+                document.getElementById('editTotalScore').value = item.totalScore || '';
+                
+                if (item.scores && Array.isArray(item.scores)) {
+                    document.getElementById('editScore1').value = item.scores[0] || '';
+                    document.getElementById('editScore2').value = item.scores[1] || '';
+                    document.getElementById('editScore3').value = item.scores[2] || '';
+                } else {
+                    document.getElementById('editScore1').value = '';
+                    document.getElementById('editScore2').value = '';
+                    document.getElementById('editScore3').value = '';
+                }
+                
+                if (item.albumCount) {
+                    document.getElementById('editAlbumCount').value = item.albumCount;
+                }
+                
+                document.getElementById('modalTitle').textContent = `编辑${getTypeName(type)}`;
+                document.getElementById('topicFields').style.display = type === 'topics' ? 'block' : 'none';
+                document.getElementById('editModal').classList.add('active');
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                alert('加载数据失败，请检查后端服务器是否运行');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        // 保存数据到后端
+        async function saveData() {
+            const formData = new FormData(document.getElementById('editForm'));
+            const type = formData.get('type');
+            const id = formData.get('id');
+            
+            // 组织数据
+            const data = {
+                title: formData.get('title'),
+                artist: formData.get('artist'),
+                date: formData.get('date'),
+                genre: formData.get('genre'),
+                tag: formData.get('tag'),
+                intro: formData.get('intro'),
+                content: formData.get('content'),
+                totalScore: parseFloat(formData.get('totalScore')),
+                scores: [
+                    parseFloat(formData.get('score1')),
+                    parseFloat(formData.get('score2')),
+                    parseFloat(formData.get('score3'))
+                ]
+            };
+            
+            // 专题特有字段
+            if (type === 'topics') {
+                data.category = formData.get('artist');
+                data.albumCount = parseInt(formData.get('albumCount'));
+            }
+
+            try {
+                let response;
+                const url = `${API_BASE}/${type}`;
+                
+                if (id) {
+                    // 更新
+                    response = await fetch(`${url}/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                } else {
+                    // 创建
+                    response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                }
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('保存成功！');
+                    closeModal();
+                    loadData(type);
+                } else {
+                    alert('保存失败：' + (result.error || '未知错误'));
+                }
+            } catch (error) {
+                console.error('保存失败:', error);
+                alert('保存失败！请确保后端服务器已启动（运行 node server.js）');
+            }
+        }
+
+        // 删除数据
+        async function deleteItem(type, id) {
+            if (!confirm('确定要删除这项内容吗？')) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/${type}/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('删除成功！');
+                    loadData(type);
+                } else {
+                    alert('删除失败：' + (result.error || '未知错误'));
+                }
+            } catch (error) {
+                console.error('删除失败:', error);
+                alert('删除失败！请确保后端服务器已启动');
+            }
+        }
+
+        function getTypeName(type) {
+            const names = {
+                fresh: '新鲜速递',
+                classic: '经典重温',
+                topics: '榜上有名'
+            };
+            return names[type] || '';
+        }
+
+        // 点击模态框外部关闭
+        document.getElementById('editModal').addEventListener('click', (e) => {
+            if (e.target.id === 'editModal') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
+

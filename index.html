@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>馒头音乐小站 - 用心聆听，用爱分享</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🎵</span>
+                <span class="logo-text">馒头音乐小站</span>
+            </div>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#fresh" class="nav-link">新鲜速递</a></li>
+                <li><a href="#classic" class="nav-link">重温经典</a></li>
+                <li><a href="#charts" class="nav-link">榜上有名</a></li>
+                <li><a href="#interview" class="nav-link">坐下谈谈</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-left">
+                <div class="today-updates">
+                    <h3 class="updates-title">今日更新</h3>
+                    <div class="updates-list">
+                        <div class="update-item">
+                            <span class="update-time">10:30</span>
+                            <span class="update-text">新增专辑评论：《午夜回声》</span>
+                        </div>
+                        <div class="update-item">
+                            <span class="update-time">14:20</span>
+                            <span class="update-text">更新专题：21世纪最伟大的摇滚乐</span>
+                        </div>
+                        <div class="update-item">
+                            <span class="update-time">16:45</span>
+                            <span class="update-text">新增访谈：星河乐队独家专访</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-center">
+                <div class="hero-content">
+                    <h1 class="hero-title">欢迎来到自由自在的音乐分享空间</h1>
+                    <p class="hero-subtitle">在这里 每一个声音都被聆听</p>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="team-intro">
+                    <h3 class="team-title">关于我们</h3>
+                    <div class="team-member">
+                        <div class="member-avatar">🍞</div>
+                        <div class="member-info">
+                            <h4 class="member-name">馒头</h4>
+                            <p class="member-role">网站主理人</p>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">🐴</div>
+                        <div class="member-info">
+                            <h4 class="member-name">马马</h4>
+                            <p class="member-role">音乐顾问</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-bg"></div>
+    </section>
+
+    <!-- 新鲜速递 -->
+    <section id="fresh" class="section fresh-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">新鲜速递</h2>
+                <p class="section-subtitle">最新专辑与单曲评论</p>
+            </div>
+            
+            <a href="detail-fresh.html" class="featured-review">
+                <div class="featured-image">
+                    <img src="/placeholder.svg?height=600&width=600" alt="专辑封面">
+                </div>
+                <div class="featured-content">
+                    <span class="tag">新专辑</span>
+                    <h3 class="review-title">《午夜回声》- 星河乐队</h3>
+                    <p class="review-meta">发行日期：2025年10月 | 评论者：小馒头</p>
+                    <p class="review-excerpt">
+                        这张专辑如同一场深夜的独白，用温柔的旋律包裹着都市人的孤独与希望。主打歌《城市之光》以简约的编曲和深情的演唱，勾勒出现代人在繁华都市中寻找归属感的心路历程。整张专辑在制作上精益求精，每一个音符都恰到好处...
+                    </p>
+                    <button class="btn-secondary">阅读完整评论</button>
+                </div>
+            </a>
+
+            <div class="reviews-grid">
+                <a href="detail-fresh-2.html" class="review-card">
+                    <div class="card-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="专辑封面">
+                    </div>
+                    <div class="card-content">
+                        <span class="tag-small">单曲</span>
+                        <h4>《漂流瓶》</h4>
+                        <p class="artist">海风乐团</p>
+                        <p class="excerpt">一首关于告别与重逢的温柔情歌...</p>
+                    </div>
+                </a>
+
+                <a href="detail-fresh-3.html" class="review-card">
+                    <div class="card-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="专辑封面">
+                    </div>
+                    <div class="card-content">
+                        <span class="tag-small">新专辑</span>
+                        <h4>《数字梦境》</h4>
+                        <p class="artist">电子诗人</p>
+                        <p class="excerpt">将电子音乐与诗意完美融合的实验之作...</p>
+                    </div>
+                </a>
+
+                <a href="detail-fresh-4.html" class="review-card">
+                    <div class="card-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="专辑封面">
+                    </div>
+                    <div class="card-content">
+                        <span class="tag-small">EP</span>
+                        <h4>《山间小调》</h4>
+                        <p class="artist">木吉他与她</p>
+                        <p class="excerpt">回归自然的民谣小品，清新治愈...</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 重温经典 -->
+    <section id="classic" class="section classic-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">重温经典</h2>
+                <p class="section-subtitle">那些值得反复聆听的永恒之作</p>
+            </div>
+
+            <div class="classic-grid">
+                <a href="detail-classic.html" class="classic-card">
+                    <div class="classic-image">
+                        <img src="/placeholder.svg?height=400&width=400" alt="经典专辑">
+                        <div class="year-badge">1995</div>
+                    </div>
+                    <div class="classic-content">
+                        <h4>《时光机器》</h4>
+                        <p class="artist">回声乐队</p>
+                        <p class="classic-text">
+                            三十年后重听这张专辑，依然能感受到那个年代独有的真诚与热血。《时光机器》不仅是一张专辑，更是一代人的青春记忆...
+                        </p>
+                    </div>
+                </a>
+
+                <a href="detail-classic-2.html" class="classic-card">
+                    <div class="classic-image">
+                        <img src="/placeholder.svg?height=400&width=400" alt="经典专辑">
+                        <div class="year-badge">2003</div>
+                    </div>
+                    <div class="classic-content">
+                        <h4>《午夜爵士》</h4>
+                        <p class="artist">蓝调猫</p>
+                        <p class="classic-text">
+                            这张专辑定义了新世纪爵士乐的声音。每一个音符都散发着慵懒而优雅的气息，是深夜独处时的最佳伴侣...
+                        </p>
+                    </div>
+                </a>
+
+                <a href="detail-classic-3.html" class="classic-card">
+                    <div class="classic-image">
+                        <img src="/placeholder.svg?height=400&width=400" alt="经典专辑">
+                        <div class="year-badge">2010</div>
+                    </div>
+                    <div class="classic-content">
+                        <h4>《森林诗篇》</h4>
+                        <p class="artist">旅行者</p>
+                        <p class="classic-text">
+                            一张用音乐描绘自然的杰作。从清晨的鸟鸣到夜晚的虫鸣，每一首歌都是一幅声音的画卷...
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 榜上有名 -->
+    <section id="charts" class="section charts-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">榜上有名</h2>
+                <p class="section-subtitle">精选音乐专题栏目</p>
+            </div>
+
+            <div class="topics-grid">
+                <a href="detail-topic-1.html" class="topic-card">
+                    <div class="topic-image">
+                        <img src="/placeholder.svg?height=300&width=400" alt="专题封面">
+                    </div>
+                    <div class="topic-content">
+                        <span class="topic-category">摇滚专题</span>
+                        <h3 class="topic-title">21世纪最伟大的摇滚乐10张</h3>
+                        <p class="topic-description">
+                            从新千年的起点到今日，收录了21世纪最具影响力的10张摇滚专辑。这些作品不仅定义了新时代的摇滚声音，更承载着一代人的音乐记忆...
+                        </p>
+                        <div class="topic-meta">
+                            <span class="topic-count">10张专辑</span>
+                            <span class="topic-date">2025年1月更新</span>
+                        </div>
+                        <button class="btn-secondary">查看专题</button>
+                    </div>
+                </a>
+
+                <a href="detail-topic-2.html" class="topic-card">
+                    <div class="topic-image">
+                        <img src="/placeholder.svg?height=300&width=400" alt="专题封面">
+                    </div>
+                    <div class="topic-content">
+                        <span class="topic-category">爵士专题</span>
+                        <h3 class="topic-title">现代爵士乐的灵魂之声</h3>
+                        <p class="topic-description">
+                            探索当代爵士乐的创新与传承，从传统蓝调到融合爵士，精选那些重新定义爵士乐边界的经典之作...
+                        </p>
+                        <div class="topic-meta">
+                            <span class="topic-count">8张专辑</span>
+                            <span class="topic-date">2025年1月更新</span>
+                        </div>
+                        <button class="btn-secondary">查看专题</button>
+                    </div>
+                </a>
+
+                <a href="detail-topic-3.html" class="topic-card">
+                    <div class="topic-image">
+                        <img src="/placeholder.svg?height=300&width=400" alt="专题封面">
+                    </div>
+                    <div class="topic-content">
+                        <span class="topic-category">民谣专题</span>
+                        <h3 class="topic-title">治愈系民谣小品集</h3>
+                        <p class="topic-description">
+                            收集那些温暖人心的民谣作品，用简单的旋律和真挚的歌词，抚慰每一个疲惫的灵魂...
+                        </p>
+                        <div class="topic-meta">
+                            <span class="topic-count">12张专辑</span>
+                            <span class="topic-date">2024年12月更新</span>
+                        </div>
+                        <button class="btn-secondary">查看专题</button>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 坐下谈谈 -->
+    <section id="interview" class="section interview-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">坐下谈谈</h2>
+                <p class="section-subtitle">与音乐人的深度对话</p>
+            </div>
+
+            <div class="interview-featured">
+                <div class="interview-image">
+                    <img src="/placeholder.svg?height=500&width=800" alt="访谈">
+                </div>
+                <div class="interview-content">
+                    <span class="tag">独家专访</span>
+                    <h3>星河乐队：在音乐中寻找自己</h3>
+                    <p class="interview-intro">
+                        "我们不是在创作音乐，而是在用音乐讲述生活。" 在这个阳光明媚的下午，我们与星河乐队的主唱小星坐下来，聊了聊他们的新专辑《午夜回声》，以及音乐创作背后的故事...
+                    </p>
+                    <button class="btn-secondary">阅读完整访谈</button>
+                </div>
+            </div>
+
+            <div class="interview-grid">
+                <article class="interview-card">
+                    <div class="interview-card-image">
+                        <img src="/placeholder.svg?height=300&width=400" alt="音乐人">
+                    </div>
+                    <div class="interview-card-content">
+                        <h4>海风乐团：用音乐记录旅行</h4>
+                        <p>从海边小镇走向世界舞台的故事...</p>
+                        <span class="read-time">阅读时间：8分钟</span>
+                    </div>
+                </article>
+
+                <article class="interview-card">
+                    <div class="interview-card-image">
+                        <img src="/placeholder.svg?height=300&width=400" alt="音乐人">
+                    </div>
+                    <div class="interview-card-content">
+                        <h4>电子诗人：科技与艺术的碰撞</h4>
+                        <p>探索电子音乐的无限可能...</p>
+                        <span class="read-time">阅读时间：10分钟</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">🎵</span>
+                    <span class="logo-text">馒头音乐小站</span>
+                    <p class="footer-tagline">用心聆听，用爱分享</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h5>栏目</h5>
+                        <ul>
+                            <li><a href="#fresh">新鲜速递</a></li>
+                            <li><a href="#classic">重温经典</a></li>
+                            <li><a href="#charts">榜上有名</a></li>
+                            <li><a href="#interview">坐下谈谈</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h5>关于我们</h5>
+                        <ul>
+                            <li><a href="#">团队介绍</a></li>
+                            <li><a href="#">联系方式</a></li>
+                            <li><a href="#">投稿须知</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h5>关注我们</h5>
+                        <ul>
+                            <li><a href="#">微博</a></li>
+                            <li><a href="#">微信公众号</a></li>
+                            <li><a href="#">网易云音乐</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 馒头音乐小站. 用心聆听每一个音符. | <a href="admin.html" style="color: rgba(255, 255, 255, 0.5); text-decoration: none;">内容管理</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
